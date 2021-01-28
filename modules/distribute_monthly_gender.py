@@ -119,6 +119,8 @@ def distribute_monthly_gender(date, top_limit):
             WHEN sex = 'U' THEN 'UNISEX'
             WHEN sex = 'M' THEN 'MALE'
             WHEN sex = 'F' THEN 'FEMALE'
+            WHEN sex = 'KD' THEN 'KIDS'
+            WHEN sex = 'JR' THEN 'JUNIOR'
         END, SaleQty, saleValue, inventoryQty, inventoryValue
         FROM raven_getSnapshootByMonthAndGender
         WHERE SaleQty > 0

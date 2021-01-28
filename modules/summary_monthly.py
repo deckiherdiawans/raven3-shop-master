@@ -2,10 +2,7 @@ import pyodbc
 from helpers.database import Database
 from helpers.query import executeQuery
 from helpers.views import (
-    view_summary_daily,
     view_summary_monthly,
-    view_distribute,
-    view_distribute_expense,
     view_no_data,
 )
 from helpers.number_format import (
@@ -38,62 +35,66 @@ def summary_monthly(date):
                     id = object_id(N'[Raven_summaryByMonth]')
                     and OBJECTPROPERTY(id, N'IsUserTable') = 1
             ) drop table [Raven_summaryByMonth]
+
             CREATE TABLE Raven_summaryByMonth (
-                dateTrans DATETIME
-                ,  SaleQty FLOAT 
-                , saleValue money 
-                , Inventoryqty float 
-                , InventoryValue money 		
+                dateTrans DATETIME,
+                SaleQty FLOAT,
+                saleValue money,
+                Inventoryqty float,
+                InventoryValue money
             )
-            INSERT INTO Raven_summaryByMonth(dateTrans,SaleQty, saleValue, Inventoryqty,
-                InventoryValue)
+
+            INSERT INTO Raven_summaryByMonth(dateTrans, SaleQty, saleValue, Inventoryqty, InventoryValue)
             SELECT ?,0,0,0,0
+            
             UPDATE Raven_summaryByMonth
-            SET Inventoryqty = ole.qty ,
-            InventoryValue = ole.totalSalePrice
+            SET Inventoryqty = ole.qty,
+                InventoryValue = ole.totalSalePrice
             FROM
                 (
-                SELECT ? AS dateTrans,SUM(b.qty) AS qty ,SUM(b.qty*b.CurrentSalePrice) AS totalSalePrice FROM tInvArticle a
+                SELECT ? AS dateTrans, SUM(b.qty) AS qty, SUM(b.qty*b.CurrentSalePrice) AS totalSalePrice
+                FROM tInvArticle a
                 INNER JOIN tInventory b ON b.articleCode = a.articleCode
-                )ole
+                ) ole
             WHERE DATEDIFF(m,ole.dateTrans,Raven_summaryByMonth.dateTrans) = 0
 
             --cashier
             UPDATE Raven_summaryByMonth
-            SET  SaleQty = SaleQty + isnull(ole.qty,0) ,
+            SET SaleQty = SaleQty + isnull(ole.qty,0) ,
                 saleValue = saleValue + isnull(ole.totalValue,0)
             FROM
                 (
-                
-                    SELECT ? AS dateTrans,SUM(b.qty) AS qty, SUM(b.subTotal)AS  totalValue FROM tCashier a
+                    SELECT ? AS dateTrans,SUM(b.qty) AS qty, SUM(b.subTotal)AS  totalValue
+                    FROM tCashier a
                     INNER JOIN tCashierDetail b ON b.noTrans = a.noTrans
                     WHERE DATEDIFF(m,?,a.dateTrans) = 0
-                )ole
+                ) ole
             WHERE DATEDIFF(m,ole.dateTrans,Raven_summaryByMonth.dateTrans) = 0
 
             --wholesale
             UPDATE Raven_summaryByMonth
-            SET  SaleQty = SaleQty + isnull(ole.qty,0) ,
+            SET SaleQty = SaleQty + isnull(ole.qty,0) ,
                 saleValue = saleValue + isnull(ole.totalValue,0)
             FROM
                 (
-                
-                    SELECT ? AS dateTrans,SUM(b.qty) AS qty, SUM(b.subTotal) AS  totalValue FROM tShopWholeSale a
+                    SELECT ? AS dateTrans, SUM(b.qty) AS qty, SUM(b.subTotal) AS totalValue
+                    FROM tShopWholeSale a
                     INNER JOIN tShopWholeSaleDetail b ON b.noTrans = a.noTrans
                     WHERE DATEDIFF(m,?,a.dateTrans) = 0
-                )ole
+                ) ole
             WHERE DATEDIFF(m,ole.dateTrans,Raven_summaryByMonth.dateTrans) = 0
 
             --online
             UPDATE Raven_summaryByMonth
-            SET  SaleQty = SaleQty + isnull(ole.qty,0) ,
+            SET SaleQty = SaleQty + isnull(ole.qty,0) ,
                 saleValue = saleValue + isnull(ole.totalValue,0)
             FROM
                 (
-                    SELECT ? AS dateTrans,SUM(b.qty) AS qty, SUM(b.subTotal) totalValue FROM tOnline_Cashier a
+                    SELECT ? AS dateTrans,SUM(b.qty) AS qty, SUM(b.subTotal) totalValue
+                    FROM tOnline_Cashier a
                     INNER JOIN tOnline_CashierDetail b ON b.noTrans = a.noTrans
                     WHERE DATEDIFF(m,?,a.dateTrans) = 0
-                )ole
+                ) ole
             WHERE DATEDIFF(m,ole.dateTrans,Raven_summaryByMonth.dateTrans) = 0
             """,
             date,
@@ -108,8 +109,7 @@ def summary_monthly(date):
 
         cursor.execute(
             """
-            SELECT --a.dateTrans, 
-                a.SaleQty, a.saleValue, isnull(a.Inventoryqty, 0) as Inventoryqty, isnull(a.InventoryValue, 0) as InventoryValue 
+            SELECT a.SaleQty, a.saleValue, isnull(a.Inventoryqty, 0) as Inventoryqty, isnull(a.InventoryValue, 0) as InventoryValue 
             FROM Raven_summaryByMonth a
             """
         )

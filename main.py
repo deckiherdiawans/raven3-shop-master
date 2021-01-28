@@ -29,6 +29,11 @@ from modules.distribute_monthly_gender import distribute_monthly_gender
 from modules.distribute_monthly_category import distribute_monthly_category
 from modules.summary_daily_store import summary_daily_store
 from modules.summary_monthly import summary_monthly
+from modules.summary_quarterly import summary_quarterly
+from modules.summary_quarter1 import summary_quarter1
+from modules.summary_quarter2 import summary_quarter2
+from modules.summary_quarter3 import summary_quarter3
+from modules.summary_quarter4 import summary_quarter4
 from modules.distribute_account_expense import distribute_account_expense
 from modules.distribute_daily_wholesale_customer import (
     distribute_daily_wholesale_customer,
@@ -114,6 +119,197 @@ def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
     return render_template("raven3.html", data=data)
 
 
+@app.route("/raven3/quarter")
+@app.route("/raven3/quarter/<report_year>/<report_quarter>")
+def quarter(report_year="", report_quarter=""):
+    report_quarter = report_quarter.lower()
+    if report_year == "":
+        report_year = datetime.datetime.now().strftime("%Y")
+        p1 = 1
+        p2 = 3
+        p3 = 4
+        p4 = 6
+        p5 = 7
+        p6 = 9
+        p7 = 10
+        p8 = 12
+        data = {}
+        data["company"] = config["company"]
+        data["location"] = config["location"]
+        # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+        data["date_report_data"] = y
+        # report creation date time
+        now_human = datetime.datetime.now()
+        data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+        # widgets prep
+        data["widgets"] = {}
+        data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+        data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+        data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+        data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+    if len(report_quarter) == 2:
+        # fix on report_year always showing server boot time
+        if report_quarter == "q1":
+            string = "Januari, Februari, Maret "
+            p1 = 1
+            p2 = 3
+        elif report_quarter == "q2":
+            string = "April, Mei, Juni "
+            p1 = 4
+            p2 = 6
+        elif report_quarter == "q3":
+            string = "Juli, Agustus, September "
+            p1 = 7
+            p2 = 9
+        elif report_quarter == "q4":
+            string = "Oktober, November, Desember "
+            p1 = 10
+            p2 = 12
+        # data prep
+        data = {}
+        data["company"] = config["company"]
+        data["location"] = config["location"]
+        # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+        data["date_report_data"] = string + y
+        # report creation date time
+        now_human = datetime.datetime.now()
+        data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+        # widgets prep
+        data["widgets"] = {}
+        data["widgets"]["summary_quarterly"] = summary_quarterly(report_year, p1, p2)
+    else:
+        if report_quarter == "q1-q2":
+            string = "Januari - Juni "
+            p1 = 1
+            p2 = 3
+            p3 = 4
+            p4 = 6
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+        elif report_quarter == "q1-q3":
+            string = "Januari - September "
+            p1 = 1
+            p2 = 3
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+        elif report_quarter == "q1-q4":
+            string = "Januari - Desember "
+            p1 = 1
+            p2 = 3
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            p7 = 10
+            p8 = 12
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+            data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+        elif report_quarter == "q2-q3":
+            string = "April - September "
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+        elif report_quarter == "q2-q4":
+            string = "April - Desember "
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            p7 = 10
+            p8 = 12
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+            data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+        elif report_quarter == "q3-q4":
+            string = "Juli - Desember "
+            p5 = 7
+            p6 = 9
+            p7 = 10
+            p8 = 12
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+            data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+
+    return render_template("raven3.html", data=data)
+
+
 @app.route("/raven3/send")
 @app.route("/raven3/send/<report_date>")
 @app.route("/raven3/send/<report_date>/<int:top_limit>")
@@ -157,6 +353,207 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
     data["widgets"]["distribute_monthly_category"] = distribute_monthly_category(
         report_date, top_limit
     )
+
+    msg = Message(
+        config["title"],
+        sender=config["sender"],
+        recipients=config["recipients"],
+        html=render_template("raven3.html", data=data),
+        cc=config["cc"],
+        bcc=config["bcc"],
+    )
+
+    mail.send(msg)
+    return "sent"
+
+
+@app.route("/raven3/quarter/send")
+@app.route("/raven3/quarter/send/<report_year>/<report_quarter>")
+def quarter_send(report_year="", report_quarter=""):
+    report_quarter = report_quarter.lower()
+    if report_year == "":
+        report_year = datetime.datetime.now().strftime("%Y")
+        p1 = 1
+        p2 = 3
+        p3 = 4
+        p4 = 6
+        p5 = 7
+        p6 = 9
+        p7 = 10
+        p8 = 12
+        data = {}
+        data["company"] = config["company"]
+        data["location"] = config["location"]
+        # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+        data["date_report_data"] = y
+        # report creation date time
+        now_human = datetime.datetime.now()
+        data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+        # widgets prep
+        data["widgets"] = {}
+        data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+        data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+        data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+        data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+    if len(report_quarter) == 2:
+        # fix on report_year always showing server boot time
+        if report_quarter == "q1":
+            string = "Januari, Februari, Maret "
+            p1 = 1
+            p2 = 3
+        elif report_quarter == "q2":
+            string = "April, Mei, Juni "
+            p1 = 4
+            p2 = 6
+        elif report_quarter == "q3":
+            string = "Juli, Agustus, September "
+            p1 = 7
+            p2 = 9
+        elif report_quarter == "q4":
+            string = "Oktober, November, Desember "
+            p1 = 10
+            p2 = 12
+        # data prep
+        data = {}
+        data["company"] = config["company"]
+        data["location"] = config["location"]
+        # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+        data["date_report_data"] = string + y
+        # report creation date time
+        now_human = datetime.datetime.now()
+        data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+        # widgets prep
+        data["widgets"] = {}
+        data["widgets"]["summary_quarterly"] = summary_quarterly(report_year, p1, p2)
+    else:
+        if report_quarter == "q1-q2":
+            string = "Januari - Juni "
+            p1 = 1
+            p2 = 3
+            p3 = 4
+            p4 = 6
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+        elif report_quarter == "q1-q3":
+            string = "Januari - September "
+            p1 = 1
+            p2 = 3
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+        elif report_quarter == "q1-q4":
+            string = "Januari - Desember "
+            p1 = 1
+            p2 = 3
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            p7 = 10
+            p8 = 12
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, p1, p2)
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+            data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+        elif report_quarter == "q2-q3":
+            string = "April - September "
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+        elif report_quarter == "q2-q4":
+            string = "April - Desember "
+            p3 = 4
+            p4 = 6
+            p5 = 7
+            p6 = 9
+            p7 = 10
+            p8 = 12
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, p3, p4)
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+            data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
+        elif report_quarter == "q3-q4":
+            string = "Juli - Desember "
+            p5 = 7
+            p6 = 9
+            p7 = 10
+            p8 = 12
+            data = {}
+            data["company"] = config["company"]
+            data["location"] = config["location"]
+            # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
+            data["date_report_data"] = string + y
+            # report creation date time
+            now_human = datetime.datetime.now()
+            data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
+            # widgets prep
+            data["widgets"] = {}
+            data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, p5, p6)
+            data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, p7, p8)
 
     msg = Message(
         config["title"],
