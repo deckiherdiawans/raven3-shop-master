@@ -1,18 +1,15 @@
-if exists (
-    select
-        *
-    from
-        dbo.sysobjects
-    where
-        id = object_id(N'[raven_summaryByQuarter]')
-        and OBJECTPROPERTY(id, N'IsUserTable') = 1
-) drop table [raven_summaryByQuarter]
+IF EXISTS (
+    SELECT *
+    FROM dbo.sysobjects
+    WHERE id = OBJECT_ID(N'[raven_summaryByQuarter]')
+    AND OBJECTPROPERTY(id, N'IsUserTable') = 1
+) DROP TABLE [raven_summaryByQuarter]
 
 CREATE TABLE raven_summaryByQuarter (
     SaleQty FLOAT,
-    saleValue money,
-    Inventoryqty float,
-    InventoryValue money
+    saleValue MONEY,
+    Inventoryqty FLOAT,
+    InventoryValue MONEY
 )
 
 INSERT INTO raven_summaryByQuarter(SaleQty, saleValue, Inventoryqty, InventoryValue)
@@ -23,9 +20,17 @@ SET Inventoryqty = ole.qty,
     InventoryValue = ole.totalSalePrice
 FROM
     (
-        SELECT SUM(b.qty) AS qty, SUM(b.qty*b.CurrentSalePrice) AS totalSalePrice
+        SELECT SUM(ISNULL(b.qty,0) - ISNULL(invhistory.qty,0)) AS qty, SUM((ISNULL(b.qty,0) * ISNULL(b.currentsalePrice,0)) - ISNULL(invhistory.salePrice,0)) AS totalSalePrice
         FROM tInvArticle a
         INNER JOIN tInventory b ON b.articleCode = a.articleCode
+        LEFT JOIN 
+        (
+            SELECT c.barcode, SUM(c.qty * c.transtype) AS qty, SUM(c.qty * c.transtype * c.salePrice) AS salePrice
+            FROM tInvHistory c
+            WHERE c.dateTrans BETWEEN '2020-04-01 00:00:00' AND GETDATE()
+            GROUP BY c.barcode
+        ) invhistory
+        ON b.barcode = invhistory.barcode
     ) ole
 
 --cashier

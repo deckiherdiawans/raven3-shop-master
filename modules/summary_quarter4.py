@@ -11,22 +11,19 @@ from helpers.number_format import (
 )
 
 
-def summary_quarter4(year, p7, p8):
+def summary_quarter4(year, dt):
     db = Database()
     conn = db.koneksi()
     cursor = conn.cursor()
 
     cursor.execute(
         """
-        if exists (
-            select
-                *
-            from
-                dbo.sysobjects
-            where
-                id = object_id(N'[raven_summaryByQuarter]')
-                and OBJECTPROPERTY(id, N'IsUserTable') = 1
-        ) drop table [raven_summaryByQuarter]
+        IF EXISTS (
+            SELECT *
+            FROM dbo.sysobjects
+            WHERE id = OBJECT_ID(N'[raven_summaryByQuarter]')
+            AND OBJECTPROPERTY(id, N'IsUserTable') = 1
+        ) DROP TABLE [raven_summaryByQuarter]
 
         CREATE TABLE raven_summaryByQuarter (
             SaleQty FLOAT,
@@ -43,9 +40,17 @@ def summary_quarter4(year, p7, p8):
             InventoryValue = ole.totalSalePrice
         FROM
             (
-                SELECT SUM(b.qty) AS qty, SUM(b.qty*b.CurrentSalePrice) AS totalSalePrice
+                SELECT SUM(ISNULL(b.qty,0) - ISNULL(invhistory.qty,0)) AS qty, SUM((ISNULL(b.qty,0) * ISNULL(b.currentsalePrice,0)) - ISNULL(invhistory.salePrice,0)) AS totalSalePrice
                 FROM tInvArticle a
                 INNER JOIN tInventory b ON b.articleCode = a.articleCode
+                LEFT JOIN 
+                (
+                    SELECT c.barcode, SUM(c.qty * c.transtype) AS qty, SUM(c.qty * c.transtype * c.salePrice) AS salePrice
+                    FROM tInvHistory c
+                    WHERE c.dateTrans BETWEEN ? AND GETDATE()
+                    GROUP BY c.barcode
+                ) invhistory
+                ON b.barcode = invhistory.barcode
             ) ole
 
         --cashier
@@ -58,7 +63,7 @@ def summary_quarter4(year, p7, p8):
                 FROM tCashier a
                 INNER JOIN tCashierDetail b ON b.noTrans = a.noTrans
                 WHERE YEAR(a.dateTrans) = ?
-                AND MONTH(a.dateTrans) BETWEEN ? AND ?
+                AND MONTH(a.dateTrans) BETWEEN 10 AND 12
             ) ole
 
         --wholesale
@@ -71,7 +76,7 @@ def summary_quarter4(year, p7, p8):
                 FROM tShopWholeSale a
                 INNER JOIN tShopWholeSaleDetail b ON b.noTrans = a.noTrans
                 WHERE YEAR(a.dateTrans) = ?
-                AND MONTH(a.dateTrans) BETWEEN ? AND ?
+                AND MONTH(a.dateTrans) BETWEEN 10 AND 12
             ) ole
 
         --online
@@ -84,18 +89,13 @@ def summary_quarter4(year, p7, p8):
                 FROM tOnline_Cashier a
                 INNER JOIN tOnline_CashierDetail b ON b.noTrans = a.noTrans
                 WHERE YEAR(a.dateTrans) = ?
-                AND MONTH(a.dateTrans) BETWEEN ? AND ?
+                AND MONTH(a.dateTrans) BETWEEN 10 AND 12
             ) ole
         """,
+        dt,
         year,
-        p7,
-        p8,
         year,
-        p7,
-        p8,
         year,
-        p7,
-        p8,
     )
 
     cursor.execute(
