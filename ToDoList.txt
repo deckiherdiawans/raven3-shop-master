@@ -1,6 +1,6 @@
 x modify modules summary_monthly.py using try except. see popi shell sample.
 - create new modules:
     x distribute_monthly_gender. create new query, fork from stored procedure distribute_monthly_brand/category. using query, not stored procedure.
-    - summary_quarterly > jan-mar, apr-jun, jul-sep, okt-des. req param q1, q2, q3, q4. http://127.0.0.1:5000/raven3/2020/q1 http://127.0.0.1:5000/RAVEN3/2020/Q1
+    x summary_quarterly > jan-mar, apr-jun, jul-sep, okt-des. req param q1, q2, q3, q4. http://127.0.0.1:5000/raven3/2020/q1 http://127.0.0.1:5000/RAVEN3/2020/Q1
 - install postgres latest stable 13.xx
 - self tutor postgres. create user, database, table, CRUD.
