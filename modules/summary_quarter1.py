@@ -1,6 +1,6 @@
 from helpers.database import Database
 from helpers.views import (
-    view_summary_monthly,
+    view_summary_quarter1,
     view_no_data,
 )
 from helpers.number_format import (
@@ -11,7 +11,7 @@ from helpers.number_format import (
 )
 
 
-def summary_quarter1(year, dt):
+def summary_quarter1(ya, yb, dt):
     db = Database()
     conn = db.koneksi()
     cursor = conn.cursor()
@@ -62,8 +62,7 @@ def summary_quarter1(year, dt):
                 SELECT SUM(b.qty) AS qty, SUM(b.subTotal) AS totalValue
                 FROM tCashier a
                 INNER JOIN tCashierDetail b ON b.noTrans = a.noTrans
-                WHERE YEAR(a.dateTrans) = ?
-                AND MONTH(a.dateTrans) BETWEEN 1 AND 3
+                WHERE a.dateTrans BETWEEN ? AND ?
             ) ole
 
         --wholesale
@@ -75,8 +74,7 @@ def summary_quarter1(year, dt):
                 SELECT SUM(b.qty) AS qty, SUM(b.subTotal) AS totalValue
                 FROM tShopWholeSale a
                 INNER JOIN tShopWholeSaleDetail b ON b.noTrans = a.noTrans
-                WHERE YEAR(a.dateTrans) = ?
-                AND MONTH(a.dateTrans) BETWEEN 1 AND 3
+                WHERE a.dateTrans BETWEEN ? AND ?
             ) ole
 
         --online
@@ -88,14 +86,16 @@ def summary_quarter1(year, dt):
                 SELECT SUM(b.qty) AS qty, SUM(b.subTotal) totalValue
                 FROM tOnline_Cashier a
                 INNER JOIN tOnline_CashierDetail b ON b.noTrans = a.noTrans
-                WHERE YEAR(a.dateTrans) = ?
-                AND MONTH(a.dateTrans) BETWEEN 1 AND 3
+                WHERE a.dateTrans BETWEEN ? AND ?
             ) ole
         """,
         dt,
-        year,
-        year,
-        year,
+        ya,
+        yb,
+        ya,
+        yb,
+        ya,
+        yb,
     )
 
     cursor.execute(
@@ -136,6 +136,6 @@ def summary_quarter1(year, dt):
             ["Inventory Value", inventory_value],
         ]
 
-        return view_summary_monthly(data)
+        return view_summary_quarter1(data)
     else:
         return view_no_data(data["title"])

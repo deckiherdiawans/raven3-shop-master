@@ -42,8 +42,7 @@ FROM
         SELECT SUM(b.qty) AS qty, SUM(b.subTotal) AS totalValue
         FROM tCashier a
         INNER JOIN tCashierDetail b ON b.noTrans = a.noTrans
-        WHERE YEAR(a.dateTrans) = 2020
-        AND MONTH(a.dateTrans) BETWEEN 01 AND 03
+        WHERE a.dateTrans BETWEEN '2020-01-01 00:00:00' AND '2020-04-01 00:00:00'
     ) ole
 
 --wholesale
@@ -55,8 +54,7 @@ FROM
         SELECT SUM(b.qty) AS qty, SUM(b.subTotal) AS totalValue
         FROM tShopWholeSale a
         INNER JOIN tShopWholeSaleDetail b ON b.noTrans = a.noTrans
-        WHERE YEAR(a.dateTrans) = 2020
-        AND MONTH(a.dateTrans) BETWEEN 01 AND 03
+        WHERE a.dateTrans BETWEEN '2020-01-01 00:00:00' AND '2020-04-01 00:00:00'
     ) ole
 
 --online
@@ -68,8 +66,7 @@ FROM
         SELECT SUM(b.qty) AS qty, SUM(b.subTotal) totalValue
         FROM tOnline_Cashier a
         INNER JOIN tOnline_CashierDetail b ON b.noTrans = a.noTrans
-        WHERE YEAR(a.dateTrans) = 2020
-        AND MONTH(a.dateTrans) BETWEEN 01 AND 03
+        WHERE a.dateTrans BETWEEN '2020-01-01 00:00:00' AND '2020-04-01 00:00:00'
     ) ole
 
 

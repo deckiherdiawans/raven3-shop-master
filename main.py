@@ -11,6 +11,10 @@ from helpers.query import executeQuery
 from helpers.views import (
     view_summary_daily,
     view_summary_monthly,
+    view_summary_quarter1,
+    view_summary_quarter2,
+    view_summary_quarter3,
+    view_summary_quarter4,
     view_distribute,
     view_distribute_expense,
     view_no_data,
@@ -78,7 +82,35 @@ def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
     # fix on report_date always showing server boot time
     if report_date == "0000-00-00":
         report_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+        yint = int(report_year)
+        yearA = str(yint) + "-01-01 00:00:00"
+        yearB = str(yint) + "-04-01 00:00:00"
+        yearC = str(yint) + "-04-01 00:00:00"
+        yearD = str(yint) + "-07-01 00:00:00"
+        yearE = str(yint) + "-07-01 00:00:00"
+        yearF = str(yint) + "-10-01 00:00:00"
+        yearG = str(yint) + "-10-01 00:00:00"
+        yearH = str(yint + 1) + "-01-01 00:00:00"
+        datetime1 = str(yint) + "-04-01 00:00:00"
+        datetime2 = str(yint) + "-07-01 00:00:00"
+        datetime3 = str(yint) + "-10-01 00:00:00"
+        datetime4 = str(yint + 1) + "-01-01 00:00:00"
     # data prep
+    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    yint = int(report_year)
+    yearA = str(yint) + "-01-01 00:00:00"
+    yearB = str(yint) + "-04-01 00:00:00"
+    yearC = str(yint) + "-04-01 00:00:00"
+    yearD = str(yint) + "-07-01 00:00:00"
+    yearE = str(yint) + "-07-01 00:00:00"
+    yearF = str(yint) + "-10-01 00:00:00"
+    yearG = str(yint) + "-10-01 00:00:00"
+    yearH = str(yint + 1) + "-01-01 00:00:00"
+    datetime1 = str(yint) + "-04-01 00:00:00"
+    datetime2 = str(yint) + "-07-01 00:00:00"
+    datetime3 = str(yint) + "-10-01 00:00:00"
+    datetime4 = str(yint + 1) + "-01-01 00:00:00"
     data = {}
     data["company"] = config["company"]
     data["location"] = config["location"]
@@ -105,6 +137,10 @@ def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
         report_date, top_limit
     )
     data["widgets"]["summary_monthly"] = summary_monthly(report_date)
+    data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
+    data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
+    data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
+    data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
     data["widgets"]["distribute_monthly_brand"] = distribute_monthly_brand(
         report_date, top_limit
     )
@@ -130,6 +166,14 @@ def quarter(report_year="", report_quarter=""):
     if report_year == "":
         report_year = datetime.datetime.now().strftime("%Y")
         yint = int(report_year)
+        yearA = str(yint) + "-01-01 00:00:00"
+        yearB = str(yint) + "-04-01 00:00:00"
+        yearC = str(yint) + "-04-01 00:00:00"
+        yearD = str(yint) + "-07-01 00:00:00"
+        yearE = str(yint) + "-07-01 00:00:00"
+        yearF = str(yint) + "-10-01 00:00:00"
+        yearG = str(yint) + "-10-01 00:00:00"
+        yearH = str(yint + 1) + "-01-01 00:00:00"
         datetime1 = str(yint) + "-04-01 00:00:00"
         datetime2 = str(yint) + "-07-01 00:00:00"
         datetime3 = str(yint) + "-10-01 00:00:00"
@@ -137,11 +181,19 @@ def quarter(report_year="", report_quarter=""):
         y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
         data["date_report_data"] = y
         data["widgets"] = {}
-        data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, datetime1)
-        data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, datetime2)
-        data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, datetime3)
-        data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, datetime4)
+        data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
+        data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
+        data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
+        data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
     yint = int(report_year)
+    yearA = str(yint) + "-01-01 00:00:00"
+    yearB = str(yint) + "-04-01 00:00:00"
+    yearC = str(yint) + "-04-01 00:00:00"
+    yearD = str(yint) + "-07-01 00:00:00"
+    yearE = str(yint) + "-07-01 00:00:00"
+    yearF = str(yint) + "-10-01 00:00:00"
+    yearG = str(yint) + "-10-01 00:00:00"
+    yearH = str(yint + 1) + "-01-01 00:00:00"
     datetime1 = str(yint) + "-04-01 00:00:00"
     datetime2 = str(yint) + "-07-01 00:00:00"
     datetime3 = str(yint) + "-10-01 00:00:00"
@@ -152,32 +204,32 @@ def quarter(report_year="", report_quarter=""):
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter1(
-                report_year, datetime1
+            data["widgets"]["summary_quarter1"] = summary_quarter1(
+                yearA, yearB, datetime1
             )
         elif report_quarter == "q2":
             string = "April, Mei, Juni "
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter2(
-                report_year, datetime2
+            data["widgets"]["summary_quarter2"] = summary_quarter2(
+                yearC, yearD, datetime2
             )
         elif report_quarter == "q3":
             string = "Juli, Agustus, September "
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter3(
-                report_year, datetime3
+            data["widgets"]["summary_quarter3"] = summary_quarter3(
+                yearE, yearF, datetime3
             )
         elif report_quarter == "q4":
             string = "Oktober, November, Desember "
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter4(
-                report_year, datetime4
+            data["widgets"]["summary_quarter4"] = summary_quarter4(
+                yearG, yearH, datetime4
             )
     else:
         if report_quarter == "q1-q2":
@@ -186,10 +238,10 @@ def quarter(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter1"] = summary_quarter1(
-                report_year, datetime1
+                yearA, yearB, datetime1
             )
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
         elif report_quarter == "q1-q3":
             string = "Januari - September "
@@ -197,13 +249,13 @@ def quarter(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter1"] = summary_quarter1(
-                report_year, datetime1
+                yearA, yearB, datetime1
             )
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
         elif report_quarter == "q1-q4":
             string = "Januari - Desember "
@@ -211,16 +263,16 @@ def quarter(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter1"] = summary_quarter1(
-                report_year, datetime1
+                yearA, yearB, datetime1
             )
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
             data["widgets"]["summary_quarter4"] = summary_quarter4(
-                report_year, datetime4
+                yearG, yearH, datetime4
             )
         elif report_quarter == "q2-q3":
             string = "April - September "
@@ -228,10 +280,10 @@ def quarter(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
         elif report_quarter == "q2-q4":
             string = "April - Desember "
@@ -239,13 +291,13 @@ def quarter(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
             data["widgets"]["summary_quarter4"] = summary_quarter4(
-                report_year, datetime4
+                yearG, yearH, datetime4
             )
         elif report_quarter == "q3-q4":
             string = "Juli - Desember "
@@ -253,10 +305,10 @@ def quarter(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
             data["widgets"]["summary_quarter4"] = summary_quarter4(
-                report_year, datetime4
+                yearG, yearH, datetime4
             )
 
     return render_template("raven3.html", data=data)
@@ -269,7 +321,35 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
     # fix on report_date always showing server boot time
     if report_date == "0000-00-00":
         report_date = datetime.datetime.now().strftime("%Y-%m-%d")
+        report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+        yint = int(report_year)
+        yearA = str(yint) + "-01-01 00:00:00"
+        yearB = str(yint) + "-04-01 00:00:00"
+        yearC = str(yint) + "-04-01 00:00:00"
+        yearD = str(yint) + "-07-01 00:00:00"
+        yearE = str(yint) + "-07-01 00:00:00"
+        yearF = str(yint) + "-10-01 00:00:00"
+        yearG = str(yint) + "-10-01 00:00:00"
+        yearH = str(yint + 1) + "-01-01 00:00:00"
+        datetime1 = str(yint) + "-04-01 00:00:00"
+        datetime2 = str(yint) + "-07-01 00:00:00"
+        datetime3 = str(yint) + "-10-01 00:00:00"
+        datetime4 = str(yint + 1) + "-01-01 00:00:00"
     # data prep
+    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    yint = int(report_year)
+    yearA = str(yint) + "-01-01 00:00:00"
+    yearB = str(yint) + "-04-01 00:00:00"
+    yearC = str(yint) + "-04-01 00:00:00"
+    yearD = str(yint) + "-07-01 00:00:00"
+    yearE = str(yint) + "-07-01 00:00:00"
+    yearF = str(yint) + "-10-01 00:00:00"
+    yearG = str(yint) + "-10-01 00:00:00"
+    yearH = str(yint + 1) + "-01-01 00:00:00"
+    datetime1 = str(yint) + "-04-01 00:00:00"
+    datetime2 = str(yint) + "-07-01 00:00:00"
+    datetime3 = str(yint) + "-10-01 00:00:00"
+    datetime4 = str(yint + 1) + "-01-01 00:00:00"
     data = {}
     data["company"] = config["company"]
     data["location"] = config["location"]
@@ -296,6 +376,10 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
         report_date, top_limit
     )
     data["widgets"]["summary_monthly"] = summary_monthly(report_date)
+    data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
+    data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
+    data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
+    data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
     data["widgets"]["distribute_monthly_brand"] = distribute_monthly_brand(
         report_date, top_limit
     )
@@ -331,6 +415,14 @@ def quarter_send(report_year="", report_quarter=""):
     if report_year == "":
         report_year = datetime.datetime.now().strftime("%Y")
         yint = int(report_year)
+        yearA = str(yint) + "-01-01 00:00:00"
+        yearB = str(yint) + "-04-01 00:00:00"
+        yearC = str(yint) + "-04-01 00:00:00"
+        yearD = str(yint) + "-07-01 00:00:00"
+        yearE = str(yint) + "-07-01 00:00:00"
+        yearF = str(yint) + "-10-01 00:00:00"
+        yearG = str(yint) + "-10-01 00:00:00"
+        yearH = str(yint + 1) + "-01-01 00:00:00"
         datetime1 = str(yint) + "-04-01 00:00:00"
         datetime2 = str(yint) + "-07-01 00:00:00"
         datetime3 = str(yint) + "-10-01 00:00:00"
@@ -338,11 +430,19 @@ def quarter_send(report_year="", report_quarter=""):
         y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
         data["date_report_data"] = y
         data["widgets"] = {}
-        data["widgets"]["summary_quarter1"] = summary_quarter1(report_year, datetime1)
-        data["widgets"]["summary_quarter2"] = summary_quarter2(report_year, datetime2)
-        data["widgets"]["summary_quarter3"] = summary_quarter3(report_year, datetime3)
-        data["widgets"]["summary_quarter4"] = summary_quarter4(report_year, datetime4)
+        data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
+        data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
+        data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
+        data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
     yint = int(report_year)
+    yearA = str(yint) + "-01-01 00:00:00"
+    yearB = str(yint) + "-04-01 00:00:00"
+    yearC = str(yint) + "-04-01 00:00:00"
+    yearD = str(yint) + "-07-01 00:00:00"
+    yearE = str(yint) + "-07-01 00:00:00"
+    yearF = str(yint) + "-10-01 00:00:00"
+    yearG = str(yint) + "-10-01 00:00:00"
+    yearH = str(yint + 1) + "-01-01 00:00:00"
     datetime1 = str(yint) + "-04-01 00:00:00"
     datetime2 = str(yint) + "-07-01 00:00:00"
     datetime3 = str(yint) + "-10-01 00:00:00"
@@ -353,32 +453,32 @@ def quarter_send(report_year="", report_quarter=""):
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter1(
-                report_year, datetime1
+            data["widgets"]["summary_quarter1"] = summary_quarter1(
+                yearA, yearB, datetime1
             )
         elif report_quarter == "q2":
             string = "April, Mei, Juni "
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter2(
-                report_year, datetime2
+            data["widgets"]["summary_quarter2"] = summary_quarter2(
+                yearC, yearD, datetime2
             )
         elif report_quarter == "q3":
             string = "Juli, Agustus, September "
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter3(
-                report_year, datetime3
+            data["widgets"]["summary_quarter3"] = summary_quarter3(
+                yearE, yearF, datetime3
             )
         elif report_quarter == "q4":
             string = "Oktober, November, Desember "
             y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
             data["date_report_data"] = string + y
             data["widgets"] = {}
-            data["widgets"]["summary_quarterly"] = summary_quarter4(
-                report_year, datetime4
+            data["widgets"]["summary_quarter4"] = summary_quarter4(
+                yearG, yearH, datetime4
             )
     else:
         if report_quarter == "q1-q2":
@@ -387,10 +487,10 @@ def quarter_send(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter1"] = summary_quarter1(
-                report_year, datetime1
+                yearA, yearB, datetime1
             )
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
         elif report_quarter == "q1-q3":
             string = "Januari - September "
@@ -398,13 +498,13 @@ def quarter_send(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter1"] = summary_quarter1(
-                report_year, datetime1
+                yearA, yearB, datetime1
             )
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
         elif report_quarter == "q1-q4":
             string = "Januari - Desember "
@@ -412,16 +512,16 @@ def quarter_send(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter1"] = summary_quarter1(
-                report_year, datetime1
+                yearA, yearB, datetime1
             )
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
             data["widgets"]["summary_quarter4"] = summary_quarter4(
-                report_year, datetime4
+                yearG, yearH, datetime4
             )
         elif report_quarter == "q2-q3":
             string = "April - September "
@@ -429,10 +529,10 @@ def quarter_send(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
         elif report_quarter == "q2-q4":
             string = "April - Desember "
@@ -440,13 +540,13 @@ def quarter_send(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter2"] = summary_quarter2(
-                report_year, datetime2
+                yearC, yearD, datetime2
             )
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
             data["widgets"]["summary_quarter4"] = summary_quarter4(
-                report_year, datetime4
+                yearG, yearH, datetime4
             )
         elif report_quarter == "q3-q4":
             string = "Juli - Desember "
@@ -454,10 +554,10 @@ def quarter_send(report_year="", report_quarter=""):
             data["date_report_data"] = string + y
             data["widgets"] = {}
             data["widgets"]["summary_quarter3"] = summary_quarter3(
-                report_year, datetime3
+                yearE, yearF, datetime3
             )
             data["widgets"]["summary_quarter4"] = summary_quarter4(
-                report_year, datetime4
+                yearG, yearH, datetime4
             )
 
     msg = Message(
