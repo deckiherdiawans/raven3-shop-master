@@ -107,7 +107,7 @@ def summary_quarter2(yc, yd, dt):
     result = cursor.fetchall()
 
     # PERSIAPKAN ARRAY UNTUK MENAMPUNG DATA
-    data = {"title": "Quarter 2 Sales"}
+    data = {"title": "Quarter 2 Sales<br>(April, Mei, Juni)"}
 
     # AMBIL BARIS PERTAMA KARENA HASIL DARI RETURN CUMAN SATU BARIS
     result = result[0]

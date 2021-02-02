@@ -168,7 +168,7 @@ def view_summary_quarter1(data):
        <!--full text title-->
        <tr bgcolor="#fff" >
            <td align="center">
-               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px;">
+               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                    """
         + data["title"]
         + """
@@ -239,7 +239,7 @@ def view_summary_quarter2(data):
        <!--full text title-->
        <tr bgcolor="#fff" >
            <td align="center">
-               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px;">
+               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                    """
         + data["title"]
         + """
@@ -310,7 +310,7 @@ def view_summary_quarter3(data):
        <!--full text title-->
        <tr bgcolor="#fff" >
            <td align="center">
-               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px;">
+               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                    """
         + data["title"]
         + """
@@ -381,7 +381,7 @@ def view_summary_quarter4(data):
        <!--full text title-->
        <tr bgcolor="#fff" >
            <td align="center">
-               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px;">
+               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                    """
         + data["title"]
         + """
@@ -682,7 +682,7 @@ def view_no_data(widget_title):
             <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
             <tr bgcolor="#fff" >
                 <td align="center">
-                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px;">
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px; line-height:30px;">
                         """
         + widget_title
         + """
