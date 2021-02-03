@@ -122,9 +122,9 @@ def summary_quarter2(yc, yd, dt):
 
         CREATE TABLE raven_summaryByQuarter (
             SaleQty FLOAT,
-            SaleValue FLOAT,
+            SaleValue MONEY,
             InventoryQty FLOAT,
-            InventoryValue FLOAT
+            InventoryValue MONEY
         );
 
         INSERT INTO raven_summaryByQuarter (SaleQty, SaleValue, InventoryQty, InventoryValue) VALUES (%s, %s, %s, %s);
