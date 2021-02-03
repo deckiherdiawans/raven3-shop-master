@@ -1,4 +1,5 @@
 from helpers.database import Database
+from helpers.postgresql import Postgre
 from helpers.views import (
     view_summary_quarter1,
     view_no_data,
@@ -23,7 +24,7 @@ def summary_quarter1(ya, yb, dt):
             FROM dbo.sysobjects
             WHERE id = OBJECT_ID(N'[raven_summaryByQuarter]')
             AND OBJECTPROPERTY(id, N'IsUserTable') = 1
-        ) drop table [raven_summaryByQuarter]
+        ) DROP TABLE [raven_summaryByQuarter]
 
         CREATE TABLE raven_summaryByQuarter (
             SaleQty FLOAT,
@@ -104,7 +105,40 @@ def summary_quarter1(ya, yb, dt):
         FROM raven_summaryByQuarter a
         """
     )
-    result = cursor.fetchall()
+
+    dbResult = cursor.fetchall()
+    getData = dbResult[0]
+    data1 = getData[0]
+    data2 = getData[1]
+    data3 = getData[2]
+    data4 = getData[3]
+
+    pg = Postgre()
+    pgconn = pg.connection()
+    pgcursor = pgconn.cursor()
+
+    query = """
+        DROP TABLE IF EXISTS raven_SummaryByQuarter;
+
+        CREATE TABLE raven_summaryByQuarter (
+            SaleQty FLOAT,
+            SaleValue MONEY,
+            InventoryQty FLOAT,
+            InventoryValue MONEY
+        );
+
+        INSERT INTO raven_summaryByQuarter (SaleQty, SaleValue, InventoryQty, InventoryValue) VALUES (%s, %s, %s, %s);
+
+        SELECT SaleQty, SaleValue::numeric, COALESCE(InventoryQty, 0) AS InventoryQty, COALESCE(InventoryValue::numeric, 0) AS InventoryValue
+        FROM raven_summaryByQuarter;
+
+        """
+
+    values = (data1, data2, data3, data4)
+
+    pgcursor.execute(query, values)
+    pgconn.commit()
+    result = pgcursor.fetchall()
 
     # PERSIAPKAN ARRAY UNTUK MENAMPUNG DATA
     data = {"title": "Quarter 1 Sales<br>(January, February, March)"}
@@ -115,7 +149,7 @@ def summary_quarter1(ya, yb, dt):
     # JIKA DATA TIDAK NOL
     total_data = len(result)
 
-    if total_data > 0 and result[1] > 0:
+    if total_data > 0 and result[0] > 0:
         # MASUKAN RECORD KEDALAM VARIABLE SUPAYA TIDAK MEMBINGUNGKAN
         sale_qty = result[0]
         sale_value = result[1]
