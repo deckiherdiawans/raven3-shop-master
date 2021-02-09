@@ -1,7 +1,6 @@
 import sys
 import os
 import datetime
-import json
 
 from flask import Flask, request, abort, json
 from flask.templating import render_template
@@ -12,10 +11,6 @@ from helpers.query import executeQuery
 from helpers.views import (
     view_summary_daily,
     view_summary_monthly,
-    view_summary_quarter1,
-    view_summary_quarter2,
-    view_summary_quarter3,
-    view_summary_quarter4,
     view_distribute,
     view_distribute_expense,
     view_no_data,
@@ -34,10 +29,7 @@ from modules.distribute_monthly_gender import distribute_monthly_gender
 from modules.distribute_monthly_category import distribute_monthly_category
 from modules.summary_daily_store import summary_daily_store
 from modules.summary_monthly import summary_monthly
-from modules.summary_quarter1 import summary_quarter1
-from modules.summary_quarter2 import summary_quarter2
-from modules.summary_quarter3 import summary_quarter3
-from modules.summary_quarter4 import summary_quarter4
+from modules.summary_quarter import summary_quarter
 from modules.distribute_account_expense import distribute_account_expense
 from modules.distribute_daily_wholesale_customer import (
     distribute_daily_wholesale_customer,
@@ -80,38 +72,13 @@ def index():
 @app.route("/raven3/<report_date>")
 @app.route("/raven3/<report_date>/<int:top_limit>")
 def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
+    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    report_quarter = ""
     # fix on report_date always showing server boot time
     if report_date == "0000-00-00":
         report_date = datetime.datetime.now().strftime("%Y-%m-%d")
         report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-        yint = int(report_year)
-        yearA = str(yint) + "-01-01 00:00:00"
-        yearB = str(yint) + "-04-01 00:00:00"
-        yearC = str(yint) + "-04-01 00:00:00"
-        yearD = str(yint) + "-07-01 00:00:00"
-        yearE = str(yint) + "-07-01 00:00:00"
-        yearF = str(yint) + "-10-01 00:00:00"
-        yearG = str(yint) + "-10-01 00:00:00"
-        yearH = str(yint + 1) + "-01-01 00:00:00"
-        datetime1 = str(yint) + "-04-01 00:00:00"
-        datetime2 = str(yint) + "-07-01 00:00:00"
-        datetime3 = str(yint) + "-10-01 00:00:00"
-        datetime4 = str(yint + 1) + "-01-01 00:00:00"
     # data prep
-    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-    yint = int(report_year)
-    yearA = str(yint) + "-01-01 00:00:00"
-    yearB = str(yint) + "-04-01 00:00:00"
-    yearC = str(yint) + "-04-01 00:00:00"
-    yearD = str(yint) + "-07-01 00:00:00"
-    yearE = str(yint) + "-07-01 00:00:00"
-    yearF = str(yint) + "-10-01 00:00:00"
-    yearG = str(yint) + "-10-01 00:00:00"
-    yearH = str(yint + 1) + "-01-01 00:00:00"
-    datetime1 = str(yint) + "-04-01 00:00:00"
-    datetime2 = str(yint) + "-07-01 00:00:00"
-    datetime3 = str(yint) + "-10-01 00:00:00"
-    datetime4 = str(yint + 1) + "-01-01 00:00:00"
     data = {}
     data["company"] = config["company"]
     data["location"] = config["location"]
@@ -138,10 +105,8 @@ def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
         report_date, top_limit
     )
     data["widgets"]["summary_monthly"] = summary_monthly(report_date)
-    data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
-    data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
-    data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
-    data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
+    for x in summary_quarter(report_year, report_quarter):
+        data["widgets"]["summary_quarter"] = x
     data["widgets"]["distribute_monthly_brand"] = distribute_monthly_brand(
         report_date, top_limit
     )
@@ -157,439 +122,42 @@ def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
 
 @app.route("/raven3/quarter")
 @app.route("/raven3/quarter/<report_year>/<report_quarter>")
-def quarter(report_year="", report_quarter=""):
+def quarter(report_year="0000", report_quarter=""):
     report_quarter = report_quarter.lower()
-    data = {}
-    data["company"] = config["company"]
-    data["location"] = config["location"]
-    now_human = datetime.datetime.now()
-    data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
-    if report_year == "":
+    # fix on report_year always showing server boot time
+    if report_year == "0000":
         report_year = datetime.datetime.now().strftime("%Y")
-        yint = int(report_year)
-        yearA = str(yint) + "-01-01 00:00:00"
-        yearB = str(yint) + "-04-01 00:00:00"
-        yearC = str(yint) + "-04-01 00:00:00"
-        yearD = str(yint) + "-07-01 00:00:00"
-        yearE = str(yint) + "-07-01 00:00:00"
-        yearF = str(yint) + "-10-01 00:00:00"
-        yearG = str(yint) + "-10-01 00:00:00"
-        yearH = str(yint + 1) + "-01-01 00:00:00"
-        datetime1 = str(yint) + "-04-01 00:00:00"
-        datetime2 = str(yint) + "-07-01 00:00:00"
-        datetime3 = str(yint) + "-10-01 00:00:00"
-        datetime4 = str(yint + 1) + "-01-01 00:00:00"
-        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-        data["date_report_data"] = y
-        data["widgets"] = {}
-        data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
-        data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
-        data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
-        data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
-    yint = int(report_year)
-    yearA = str(yint) + "-01-01 00:00:00"
-    yearB = str(yint) + "-04-01 00:00:00"
-    yearC = str(yint) + "-04-01 00:00:00"
-    yearD = str(yint) + "-07-01 00:00:00"
-    yearE = str(yint) + "-07-01 00:00:00"
-    yearF = str(yint) + "-10-01 00:00:00"
-    yearG = str(yint) + "-10-01 00:00:00"
-    yearH = str(yint + 1) + "-01-01 00:00:00"
-    datetime1 = str(yint) + "-04-01 00:00:00"
-    datetime2 = str(yint) + "-07-01 00:00:00"
-    datetime3 = str(yint) + "-10-01 00:00:00"
-    datetime4 = str(yint + 1) + "-01-01 00:00:00"
-    if len(report_quarter) == 2:
-        if report_quarter == "q1":
-            string = "Januari, Februari, Maret "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-        elif report_quarter == "q2":
-            string = "April, Mei, Juni "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-        elif report_quarter == "q3":
-            string = "Juli, Agustus, September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q4":
-            string = "Oktober, November, Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-    else:
-        if report_quarter == "q1-q2":
-            string = "Januari - Juni "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-        elif report_quarter == "q1-q3":
-            string = "Januari - September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q1-q4":
-            string = "Januari - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-        elif report_quarter == "q2-q3":
-            string = "April - September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q2-q4":
-            string = "April - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-        elif report_quarter == "q3-q4":
-            string = "Juli - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-
-    return render_template("raven3.html", data=data)
-
-
-@app.route("/raven3/json")
-@app.route("/raven3/json/<report_date>")
-@app.route("/raven3/json/<report_date/<int:top_limit>")
-def json(report_date="0000-00-00", top_limit=config["topLimit"]):
-    # fix on report_date always showing server boot time
-    if report_date == "0000-00-00":
-        report_date = datetime.datetime.now().strftime("%Y-%m-%d")
-        report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-        yint = int(report_year)
-        yearA = str(yint) + "-01-01 00:00:00"
-        yearB = str(yint) + "-04-01 00:00:00"
-        yearC = str(yint) + "-04-01 00:00:00"
-        yearD = str(yint) + "-07-01 00:00:00"
-        yearE = str(yint) + "-07-01 00:00:00"
-        yearF = str(yint) + "-10-01 00:00:00"
-        yearG = str(yint) + "-10-01 00:00:00"
-        yearH = str(yint + 1) + "-01-01 00:00:00"
-        datetime1 = str(yint) + "-04-01 00:00:00"
-        datetime2 = str(yint) + "-07-01 00:00:00"
-        datetime3 = str(yint) + "-10-01 00:00:00"
-        datetime4 = str(yint + 1) + "-01-01 00:00:00"
     # data prep
-    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-    yint = int(report_year)
-    yearA = str(yint) + "-01-01 00:00:00"
-    yearB = str(yint) + "-04-01 00:00:00"
-    yearC = str(yint) + "-04-01 00:00:00"
-    yearD = str(yint) + "-07-01 00:00:00"
-    yearE = str(yint) + "-07-01 00:00:00"
-    yearF = str(yint) + "-10-01 00:00:00"
-    yearG = str(yint) + "-10-01 00:00:00"
-    yearH = str(yint + 1) + "-01-01 00:00:00"
-    datetime1 = str(yint) + "-04-01 00:00:00"
-    datetime2 = str(yint) + "-07-01 00:00:00"
-    datetime3 = str(yint) + "-10-01 00:00:00"
-    datetime4 = str(yint + 1) + "-01-01 00:00:00"
     data = {}
     data["company"] = config["company"]
     data["location"] = config["location"]
     # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
-    data["date_report_data"] = datetime.datetime.strptime(
-        report_date, "%Y-%m-%d"
-    ).strftime("%A, %d %B %Y")
+    data["date_report_data"] = datetime.datetime.strptime(report_year, "%Y").strftime(
+        "%Y"
+    )
     # report creation date time
     now_human = datetime.datetime.now()
     data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
     # widgets prep
     data["widgets"] = {}
-    data["widgets"]["summary_daily_store"] = summary_daily_store(report_date)
-    data["widgets"][
-        "distribute_daily_online_channel"
-    ] = distribute_daily_online_channel(report_date, top_limit)
-    data["widgets"][
-        "distribute_daily_wholesale_customer"
-    ] = distribute_daily_wholesale_customer(report_date, top_limit)
-    data["widgets"]["distribute_account_expense"] = distribute_account_expense(
-        report_date
-    )
-    data["widgets"]["distribute_daily_brand_share"] = distribute_daily_brand_share(
-        report_date, top_limit
-    )
-    data["widgets"]["summary_monthly"] = summary_monthly(report_date)
-    data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
-    data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
-    data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
-    data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
-    data["widgets"]["distribute_monthly_brand"] = distribute_monthly_brand(
-        report_date, top_limit
-    )
-    data["widgets"]["distribute_monthly_gender"] = distribute_monthly_gender(
-        report_date, top_limit
-    )
-    data["widgets"]["distribute_monthly_category"] = distribute_monthly_category(
-        report_date, top_limit
-    )
+    for x in summary_quarter(report_year, report_quarter):
+        data["widgets"]["summary_quarter"] = x
 
-    return render_template("json.html", title="Raven3 JSON" jsonfile=json.dumps(data))
-
-
-@app.route("/raven3/quarter/json")
-@app.route("/raven3/quarter/json/<report_year>/<report_quarter>")
-def quarter(report_year="", report_quarter=""):
-    report_quarter = report_quarter.lower()
-    data = {}
-    data["company"] = config["company"]
-    data["location"] = config["location"]
-    now_human = datetime.datetime.now()
-    data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
-    if report_year == "":
-        report_year = datetime.datetime.now().strftime("%Y")
-        yint = int(report_year)
-        yearA = str(yint) + "-01-01 00:00:00"
-        yearB = str(yint) + "-04-01 00:00:00"
-        yearC = str(yint) + "-04-01 00:00:00"
-        yearD = str(yint) + "-07-01 00:00:00"
-        yearE = str(yint) + "-07-01 00:00:00"
-        yearF = str(yint) + "-10-01 00:00:00"
-        yearG = str(yint) + "-10-01 00:00:00"
-        yearH = str(yint + 1) + "-01-01 00:00:00"
-        datetime1 = str(yint) + "-04-01 00:00:00"
-        datetime2 = str(yint) + "-07-01 00:00:00"
-        datetime3 = str(yint) + "-10-01 00:00:00"
-        datetime4 = str(yint + 1) + "-01-01 00:00:00"
-        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-        data["date_report_data"] = y
-        data["widgets"] = {}
-        data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
-        data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
-        data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
-        data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
-    yint = int(report_year)
-    yearA = str(yint) + "-01-01 00:00:00"
-    yearB = str(yint) + "-04-01 00:00:00"
-    yearC = str(yint) + "-04-01 00:00:00"
-    yearD = str(yint) + "-07-01 00:00:00"
-    yearE = str(yint) + "-07-01 00:00:00"
-    yearF = str(yint) + "-10-01 00:00:00"
-    yearG = str(yint) + "-10-01 00:00:00"
-    yearH = str(yint + 1) + "-01-01 00:00:00"
-    datetime1 = str(yint) + "-04-01 00:00:00"
-    datetime2 = str(yint) + "-07-01 00:00:00"
-    datetime3 = str(yint) + "-10-01 00:00:00"
-    datetime4 = str(yint + 1) + "-01-01 00:00:00"
-    if len(report_quarter) == 2:
-        if report_quarter == "q1":
-            string = "Januari, Februari, Maret "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-        elif report_quarter == "q2":
-            string = "April, Mei, Juni "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-        elif report_quarter == "q3":
-            string = "Juli, Agustus, September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q4":
-            string = "Oktober, November, Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-    else:
-        if report_quarter == "q1-q2":
-            string = "Januari - Juni "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-        elif report_quarter == "q1-q3":
-            string = "Januari - September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q1-q4":
-            string = "Januari - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-        elif report_quarter == "q2-q3":
-            string = "April - September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q2-q4":
-            string = "April - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-        elif report_quarter == "q3-q4":
-            string = "Juli - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-
-    return render_template("json.html", title="Raven3 Quarter JSON" jsonfile=json.dumps(data))
+    # return summary_quarter(report_year, report_quarter)
+    return render_template("raven3.html", data=data)
 
 
 @app.route("/raven3/send")
 @app.route("/raven3/send/<report_date>")
 @app.route("/raven3/send/<report_date>/<int:top_limit>")
 def send(report_date="0000-00-00", top_limit=config["topLimit"]):
+    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    report_quarter = ""
     # fix on report_date always showing server boot time
     if report_date == "0000-00-00":
         report_date = datetime.datetime.now().strftime("%Y-%m-%d")
         report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-        yint = int(report_year)
-        yearA = str(yint) + "-01-01 00:00:00"
-        yearB = str(yint) + "-04-01 00:00:00"
-        yearC = str(yint) + "-04-01 00:00:00"
-        yearD = str(yint) + "-07-01 00:00:00"
-        yearE = str(yint) + "-07-01 00:00:00"
-        yearF = str(yint) + "-10-01 00:00:00"
-        yearG = str(yint) + "-10-01 00:00:00"
-        yearH = str(yint + 1) + "-01-01 00:00:00"
-        datetime1 = str(yint) + "-04-01 00:00:00"
-        datetime2 = str(yint) + "-07-01 00:00:00"
-        datetime3 = str(yint) + "-10-01 00:00:00"
-        datetime4 = str(yint + 1) + "-01-01 00:00:00"
     # data prep
-    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-    yint = int(report_year)
-    yearA = str(yint) + "-01-01 00:00:00"
-    yearB = str(yint) + "-04-01 00:00:00"
-    yearC = str(yint) + "-04-01 00:00:00"
-    yearD = str(yint) + "-07-01 00:00:00"
-    yearE = str(yint) + "-07-01 00:00:00"
-    yearF = str(yint) + "-10-01 00:00:00"
-    yearG = str(yint) + "-10-01 00:00:00"
-    yearH = str(yint + 1) + "-01-01 00:00:00"
-    datetime1 = str(yint) + "-04-01 00:00:00"
-    datetime2 = str(yint) + "-07-01 00:00:00"
-    datetime3 = str(yint) + "-10-01 00:00:00"
-    datetime4 = str(yint + 1) + "-01-01 00:00:00"
     data = {}
     data["company"] = config["company"]
     data["location"] = config["location"]
@@ -616,10 +184,7 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
         report_date, top_limit
     )
     data["widgets"]["summary_monthly"] = summary_monthly(report_date)
-    data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
-    data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
-    data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
-    data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
+    data["widgets"]["summary_quarter"] = summary_quarter(report_year, report_quarter)
     data["widgets"]["distribute_monthly_brand"] = distribute_monthly_brand(
         report_date, top_limit
     )
@@ -629,6 +194,8 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
     data["widgets"]["distribute_monthly_category"] = distribute_monthly_category(
         report_date, top_limit
     )
+
+    return render_template("raven3.html", data=data)
 
     msg = Message(
         config["title"],
@@ -647,158 +214,23 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
 @app.route("/raven3/quarter/send/<report_year>/<report_quarter>")
 def quarter_send(report_year="", report_quarter=""):
     report_quarter = report_quarter.lower()
+    # fix on report_year always showing server boot time
+    if report_year == "0000":
+        report_year = datetime.datetime.now().strftime("%Y")
+    # data prep
     data = {}
     data["company"] = config["company"]
     data["location"] = config["location"]
+    # BENERIN PARAMETER DATENYA SUPAYA MUNCUL DI TEMPLATE
+    data["date_report_data"] = datetime.datetime.strptime(report_year, "%Y").strftime(
+        "%Y"
+    )
+    # report creation date time
     now_human = datetime.datetime.now()
     data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
-    if report_year == "":
-        report_year = datetime.datetime.now().strftime("%Y")
-        yint = int(report_year)
-        yearA = str(yint) + "-01-01 00:00:00"
-        yearB = str(yint) + "-04-01 00:00:00"
-        yearC = str(yint) + "-04-01 00:00:00"
-        yearD = str(yint) + "-07-01 00:00:00"
-        yearE = str(yint) + "-07-01 00:00:00"
-        yearF = str(yint) + "-10-01 00:00:00"
-        yearG = str(yint) + "-10-01 00:00:00"
-        yearH = str(yint + 1) + "-01-01 00:00:00"
-        datetime1 = str(yint) + "-04-01 00:00:00"
-        datetime2 = str(yint) + "-07-01 00:00:00"
-        datetime3 = str(yint) + "-10-01 00:00:00"
-        datetime4 = str(yint + 1) + "-01-01 00:00:00"
-        y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-        data["date_report_data"] = y
-        data["widgets"] = {}
-        data["widgets"]["summary_quarter1"] = summary_quarter1(yearA, yearB, datetime1)
-        data["widgets"]["summary_quarter2"] = summary_quarter2(yearC, yearD, datetime2)
-        data["widgets"]["summary_quarter3"] = summary_quarter3(yearE, yearF, datetime3)
-        data["widgets"]["summary_quarter4"] = summary_quarter4(yearG, yearH, datetime4)
-    yint = int(report_year)
-    yearA = str(yint) + "-01-01 00:00:00"
-    yearB = str(yint) + "-04-01 00:00:00"
-    yearC = str(yint) + "-04-01 00:00:00"
-    yearD = str(yint) + "-07-01 00:00:00"
-    yearE = str(yint) + "-07-01 00:00:00"
-    yearF = str(yint) + "-10-01 00:00:00"
-    yearG = str(yint) + "-10-01 00:00:00"
-    yearH = str(yint + 1) + "-01-01 00:00:00"
-    datetime1 = str(yint) + "-04-01 00:00:00"
-    datetime2 = str(yint) + "-07-01 00:00:00"
-    datetime3 = str(yint) + "-10-01 00:00:00"
-    datetime4 = str(yint + 1) + "-01-01 00:00:00"
-    if len(report_quarter) == 2:
-        if report_quarter == "q1":
-            string = "Januari, Februari, Maret "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-        elif report_quarter == "q2":
-            string = "April, Mei, Juni "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-        elif report_quarter == "q3":
-            string = "Juli, Agustus, September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q4":
-            string = "Oktober, November, Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-    else:
-        if report_quarter == "q1-q2":
-            string = "Januari - Juni "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-        elif report_quarter == "q1-q3":
-            string = "Januari - September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q1-q4":
-            string = "Januari - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter1"] = summary_quarter1(
-                yearA, yearB, datetime1
-            )
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-        elif report_quarter == "q2-q3":
-            string = "April - September "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-        elif report_quarter == "q2-q4":
-            string = "April - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter2"] = summary_quarter2(
-                yearC, yearD, datetime2
-            )
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
-        elif report_quarter == "q3-q4":
-            string = "Juli - Desember "
-            y = datetime.datetime.strptime(report_year, "%Y").strftime("%Y")
-            data["date_report_data"] = string + y
-            data["widgets"] = {}
-            data["widgets"]["summary_quarter3"] = summary_quarter3(
-                yearE, yearF, datetime3
-            )
-            data["widgets"]["summary_quarter4"] = summary_quarter4(
-                yearG, yearH, datetime4
-            )
+    # widgets prep
+    data["widgets"] = {}
+    data["widgets"]["summary_quarter"] = summary_quarter(report_year, report_quarter)
 
     msg = Message(
         config["title"],
