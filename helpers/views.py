@@ -91,18 +91,18 @@ def view_summary_monthly(data):
     # WIDGET TITLE SECTION
     html = (
         """
-       <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="30"></td> </tr> <!--end white spacing-->
-       <!--full text title-->
-       <tr bgcolor="#fff" >
-           <td align="center">
-               <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
-                   """
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="30"></td> </tr> <!--end white spacing-->
+        <!--full text title-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
+                    """
         + data["title"]
         + """
-               </p>
-           </td>
-       </tr>
-       <!--end full text title-->
+                </p>
+            </td>
+        </tr>
+        <!--end full text title-->
         <!--full text content-->
         <tr bgcolor="#fff" >
             <td align="center">
@@ -141,6 +141,259 @@ def view_summary_monthly(data):
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
         + str(data["records"][3][0])
+        + """</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <!--end full text content-->
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+        <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+        """
+    )
+
+    return html
+
+
+def view_summary_quarter(data, data1, data2, data3):
+    # WIDGET TITLE SECTION
+    html = (
+        """
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="30"></td> </tr> <!--end white spacing-->
+        <!--full text title-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
+                    """
+        + data["title"]
+        + """
+                </p>
+            </td>
+        </tr>
+        <!--end full text title-->
+        <!--full text content-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <table class="full" cellpadding="5" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data["records"][0][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data["records"][0][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data["records"][1][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data["records"][1][0])
+        + """</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data["records"][2][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data["records"][2][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data["records"][3][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data["records"][3][0])
+        + """</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <!--end full text content-->
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+        <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+        
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="30"></td> </tr> <!--end white spacing-->
+        <!--full text title-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
+                    """
+        + data1["title"]
+        + """
+                </p>
+            </td>
+        </tr>
+        <!--end full text title-->
+        <!--full text content-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <table class="full" cellpadding="5" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data1["records"][0][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data1["records"][0][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data1["records"][1][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data1["records"][1][0])
+        + """</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data1["records"][2][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data1["records"][2][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data1["records"][3][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data1["records"][3][0])
+        + """</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <!--end full text content-->
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+        <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+        
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="30"></td> </tr> <!--end white spacing-->
+        <!--full text title-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
+                    """
+        + data2["title"]
+        + """
+                </p>
+            </td>
+        </tr>
+        <!--end full text title-->
+        <!--full text content-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <table class="full" cellpadding="5" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data2["records"][0][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data2["records"][0][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data2["records"][1][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data2["records"][1][0])
+        + """</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data2["records"][2][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data2["records"][2][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data2["records"][3][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data2["records"][3][0])
+        + """</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+        <!--end full text content-->
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+        <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+        
+        <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="30"></td> </tr> <!--end white spacing-->
+        <!--full text title-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
+                    """
+        + data3["title"]
+        + """
+                </p>
+            </td>
+        </tr>
+        <!--end full text title-->
+        <!--full text content-->
+        <tr bgcolor="#fff" >
+            <td align="center">
+                <table class="full" cellpadding="5" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data3["records"][0][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data3["records"][0][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data3["records"][1][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data3["records"][1][0])
+        + """</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data3["records"][2][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data3["records"][2][0])
+        + """</span>
+                            </td>
+                            <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
+                                <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
+        + str(data3["records"][3][1])
+        + """</span><br>
+                                <span style="font-size:14px;font-weight:bold;color:#414141">"""
+        + str(data3["records"][3][0])
         + """</span>
                             </td>
                         </tr>

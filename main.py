@@ -11,6 +11,7 @@ from helpers.query import executeQuery
 from helpers.views import (
     view_summary_daily,
     view_summary_monthly,
+    view_summary_quarter,
     view_distribute,
     view_distribute_expense,
     view_no_data,
@@ -105,8 +106,7 @@ def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
         report_date, top_limit
     )
     data["widgets"]["summary_monthly"] = summary_monthly(report_date)
-    for x in summary_quarter(report_year, report_quarter):
-        data["widgets"]["summary_quarter"] = x
+    data["widgets"]["summary_quarter"] = summary_quarter(report_year, report_quarter)
     data["widgets"]["distribute_monthly_brand"] = distribute_monthly_brand(
         report_date, top_limit
     )
@@ -135,13 +135,12 @@ def quarter(report_year="0000", report_quarter=""):
     data["date_report_data"] = datetime.datetime.strptime(report_year, "%Y").strftime(
         "%Y"
     )
-    # report creation date time
+    # report creation datetime
     now_human = datetime.datetime.now()
     data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
     # widgets prep
     data["widgets"] = {}
-    for x in summary_quarter(report_year, report_quarter):
-        data["widgets"]["summary_quarter"] = x
+    data["widgets"]["summary_quarter"] = summary_quarter(report_year, report_quarter)
 
     # return summary_quarter(report_year, report_quarter)
     return render_template("raven3.html", data=data)
@@ -195,8 +194,6 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
         report_date, top_limit
     )
 
-    return render_template("raven3.html", data=data)
-
     msg = Message(
         config["title"],
         sender=config["sender"],
@@ -212,7 +209,7 @@ def send(report_date="0000-00-00", top_limit=config["topLimit"]):
 
 @app.route("/raven3/quarter/send")
 @app.route("/raven3/quarter/send/<report_year>/<report_quarter>")
-def quarter_send(report_year="", report_quarter=""):
+def quarter_send(report_year="0000", report_quarter=""):
     report_quarter = report_quarter.lower()
     # fix on report_year always showing server boot time
     if report_year == "0000":
@@ -225,7 +222,7 @@ def quarter_send(report_year="", report_quarter=""):
     data["date_report_data"] = datetime.datetime.strptime(report_year, "%Y").strftime(
         "%Y"
     )
-    # report creation date time
+    # report creation datetime
     now_human = datetime.datetime.now()
     data["date_report_creation"] = now_human.strftime("%d %B %Y %H:%M:%S")
     # widgets prep
