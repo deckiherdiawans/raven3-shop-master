@@ -672,3 +672,107 @@ def view_no_data(widget_title):
     )
 
     return html
+
+
+def view_no_data_quarter(widget_title, widget_title1, widget_title2, widget_title3):
+    html = (
+        """
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px; line-height:30px;">
+                        """
+        + widget_title
+        + """
+                    </p>
+                </td>
+            </tr>
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <img src="http://cdn.revota.com/raven3/no-data.jpg">
+
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px;">
+                        No Data Available
+                    </p>
+                </td>
+            </tr>
+            <!--end full text title-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px; line-height:30px;">
+                        """
+        + widget_title1
+        + """
+                    </p>
+                </td>
+            </tr>
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <img src="http://cdn.revota.com/raven3/no-data.jpg">
+
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px;">
+                        No Data Available
+                    </p>
+                </td>
+            </tr>
+            <!--end full text title-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px; line-height:30px;">
+                        """
+        + widget_title2
+        + """
+                    </p>
+                </td>
+            </tr>
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <img src="http://cdn.revota.com/raven3/no-data.jpg">
+
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px;">
+                        No Data Available
+                    </p>
+                </td>
+            </tr>
+            <!--end full text title-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px; line-height:30px;">
+                        """
+        + widget_title3
+        + """
+                    </p>
+                </td>
+            </tr>
+            <tr bgcolor="#fff" >
+                <td align="center">
+                    <img src="http://cdn.revota.com/raven3/no-data.jpg">
+
+                    <p style="font-family: Helvetica, arial, sans-serif; font-size: 14px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 20px;">
+                        No Data Available
+                    </p>
+                </td>
+            </tr>
+            <!--end full text title-->
+            <!--white spacing--> <tr bgcolor="#fff"> <td width="100%" height="20"></td> </tr> <!--end white spacing-->
+            <!--blank spacing--> <tr> <td width="100%" height="30"></td> </tr> <!--end blank spacing-->
+        """
+    )
+
+    return html

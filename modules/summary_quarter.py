@@ -4,6 +4,7 @@ from helpers.views import (
     view_summary_monthly,
     view_summary_quarter,
     view_no_data,
+    view_no_data_quarter,
 )
 from helpers.number_format import (
     qty_format,
@@ -530,7 +531,14 @@ def summary_quarter(year, quarter):
             # return data, data1, data2, data3
             return view_summary_quarter(data, data1, data2, data3)
         else:
-            return view_no_data(data["title"])
+            data = {"title": "Quarter 1 Sales<br>(January, February, March)"}
+            data1 = {"title": "Quarter 2 Sales<br>(April, May, June)"}
+            data2 = {"title": "Quarter 3 Sales<br>(July, August, September)"}
+            data3 = {"title": "Quarter 4 Sales<br>(October, November, December)"}
+
+            return view_no_data_quarter(
+                data["title"], data1["title"], data2["title"], data3["title"]
+            )
     else:
         # show one quarter as requested on URL
         # using quarter element from URL as condition to set the timestamp variables for BETWEEN statement in query
