@@ -2,7 +2,7 @@ import sys
 import os
 import datetime
 
-from flask import Flask, request, abort, json
+from flask import Flask, request, abort, json, Response
 from flask.templating import render_template
 from werkzeug.utils import redirect
 from flask_mail import Mail, Message
@@ -144,7 +144,14 @@ def quarter(report_year="0000", report_quarter=""):
     data["widgets"] = {}
     data["widgets"]["summary_quarter"] = summary_quarter(report_year, report_quarter)
 
-    # return summary_quarter(report_year, report_quarter)
+    # file = open("QuarterSales.json", "w")
+    # file.write(json.dumps(summary_quarter(report_year, report_quarter), indent=4))
+    # file.close()
+
+    # return Response(
+    #     json.dumps(summary_quarter(report_year, report_quarter)),
+    #     mimetype="application/json",
+    # )
     return render_template("raven3.html", data=data)
 
 
