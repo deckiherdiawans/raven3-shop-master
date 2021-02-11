@@ -157,7 +157,7 @@ def view_summary_monthly(data):
     return html
 
 
-def view_summary_quarter(data, data1, data2, data3):
+def view_summary_quarter(data):
     # WIDGET TITLE SECTION
     html = (
         """
@@ -228,7 +228,7 @@ def view_summary_quarter(data, data1, data2, data3):
             <td align="center">
                 <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                     """
-        + data1["title"]
+        + data["title1"]
         + """
                 </p>
             </td>
@@ -242,36 +242,36 @@ def view_summary_quarter(data, data1, data2, data3):
                         <tr>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data1["records"][0][1])
+        + str(data["records1"][0][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data1["records"][0][0])
+        + str(data["records1"][0][0])
         + """</span>
                             </td>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data1["records"][1][1])
+        + str(data["records1"][1][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data1["records"][1][0])
+        + str(data["records1"][1][0])
         + """</span>
                             </td>
                         </tr>
                         <tr>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data1["records"][2][1])
+        + str(data["records1"][2][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data1["records"][2][0])
+        + str(data["records1"][2][0])
         + """</span>
                             </td>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data1["records"][3][1])
+        + str(data["records1"][3][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data1["records"][3][0])
+        + str(data["records1"][3][0])
         + """</span>
                             </td>
                         </tr>
@@ -289,7 +289,7 @@ def view_summary_quarter(data, data1, data2, data3):
             <td align="center">
                 <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                     """
-        + data2["title"]
+        + data["title2"]
         + """
                 </p>
             </td>
@@ -303,36 +303,36 @@ def view_summary_quarter(data, data1, data2, data3):
                         <tr>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data2["records"][0][1])
+        + str(data["records2"][0][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data2["records"][0][0])
+        + str(data["records2"][0][0])
         + """</span>
                             </td>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data2["records"][1][1])
+        + str(data["records2"][1][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data2["records"][1][0])
+        + str(data["records2"][1][0])
         + """</span>
                             </td>
                         </tr>
                         <tr>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data2["records"][2][1])
+        + str(data["records2"][2][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data2["records"][2][0])
+        + str(data["records2"][2][0])
         + """</span>
                             </td>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data2["records"][3][1])
+        + str(data["records2"][3][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data2["records"][3][0])
+        + str(data["records2"][3][0])
         + """</span>
                             </td>
                         </tr>
@@ -350,7 +350,7 @@ def view_summary_quarter(data, data1, data2, data3):
             <td align="center">
                 <p style="font-family: Helvetica, arial, sans-serif; font-size: 20px; color: #333; text-align:center; font-weight:400; padding: 20px 0px 60px; line-height:30px;">
                     """
-        + data3["title"]
+        + data["title3"]
         + """
                 </p>
             </td>
@@ -364,36 +364,36 @@ def view_summary_quarter(data, data1, data2, data3):
                         <tr>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data3["records"][0][1])
+        + str(data["records3"][0][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data3["records"][0][0])
+        + str(data["records3"][0][0])
         + """</span>
                             </td>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data3["records"][1][1])
+        + str(data["records3"][1][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data3["records"][1][0])
+        + str(data["records3"][1][0])
         + """</span>
                             </td>
                         </tr>
                         <tr>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data3["records"][2][1])
+        + str(data["records3"][2][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data3["records"][2][0])
+        + str(data["records3"][2][0])
         + """</span>
                             </td>
                             <td valign="top" style="text-align:center;border-collapse:collapse;font-family:Helvetica,Arial,sans-serif;line-height:20px;width:50%;padding-bottom:30px">
                                 <span style="font-size:32px;font-weight:normal;color:#0585f9">"""
-        + str(data3["records"][3][1])
+        + str(data["records3"][3][1])
         + """</span><br>
                                 <span style="font-size:14px;font-weight:bold;color:#414141">"""
-        + str(data3["records"][3][0])
+        + str(data["records3"][3][0])
         + """</span>
                             </td>
                         </tr>

@@ -74,12 +74,13 @@ def index():
 @app.route("/raven3/<report_date>")
 @app.route("/raven3/<report_date>/<int:top_limit>")
 def raven3(report_date="0000-00-00", top_limit=config["topLimit"]):
-    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-    report_quarter = ""
     # fix on report_date always showing server boot time
     if report_date == "0000-00-00":
         report_date = datetime.datetime.now().strftime("%Y-%m-%d")
         report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    # set report_year and report_quarter if report_date is defined on the URL
+    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    report_quarter = ""
     # data prep
     data = {}
     data["company"] = config["company"]
@@ -151,12 +152,13 @@ def quarter(report_year="0000", report_quarter=""):
 @app.route("/raven3/send/<report_date>")
 @app.route("/raven3/send/<report_date>/<int:top_limit>")
 def send(report_date="0000-00-00", top_limit=config["topLimit"]):
-    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
-    report_quarter = ""
     # fix on report_date always showing server boot time
     if report_date == "0000-00-00":
         report_date = datetime.datetime.now().strftime("%Y-%m-%d")
         report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    # set report_year and report_quarter if report_date defined on the URL
+    report_year = datetime.datetime.strptime(report_date, "%Y-%m-%d").strftime("%Y")
+    report_quarter = ""
     # data prep
     data = {}
     data["company"] = config["company"]

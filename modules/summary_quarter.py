@@ -453,32 +453,41 @@ def summary_quarter(year, quarter):
         )
         pgconn.commit()
         result = pgcursor.fetchall()
-
-        # JIKA DATA TIDAK NOL
         total_data = len(result)
 
+        # get title from query result
+        title = result[0][4]
+        title1 = result[1][4]
+        title2 = result[2][4]
+        title3 = result[3][4]
+
+        # prepare array for the data container
+        data = {
+            "title": title,
+            "title1": title1,
+            "title2": title2,
+            "title3": title3,
+        }
+
+        # JIKA DATA TIDAK NOL
         if total_data > 0 and result[0][0] > 0:
             # MASUKAN RECORD KEDALAM VARIABLE SUPAYA TIDAK MEMBINGUNGKAN
             sale_qty = result[0][0]
             sale_value = result[0][1]
             inventory_qty = result[0][2]
             inventory_value = result[0][3]
-            title = result[0][4]
             sale_qty1 = result[1][0]
             sale_value1 = result[1][1]
             inventory_qty1 = result[1][2]
             inventory_value1 = result[1][3]
-            title1 = result[1][4]
             sale_qty2 = result[2][0]
             sale_value2 = result[2][1]
             inventory_qty2 = result[2][2]
             inventory_value2 = result[2][3]
-            title2 = result[2][4]
             sale_qty3 = result[3][0]
             sale_value3 = result[3][1]
             inventory_qty3 = result[3][2]
             inventory_value3 = result[3][3]
-            title3 = result[3][4]
 
             # FORMAT TAMPILAN DATA
             sale_qty = qty_format(sale_qty)
@@ -499,45 +508,36 @@ def summary_quarter(year, quarter):
             inventory_value3 = value_format(inventory_value3)
 
             # MASUKAN DATA KE ARRAY RECORDS
-            data = {"title": title}
             data["records"] = [
                 ["Sales Qty", sale_qty],
                 ["Sales Value", sale_value],
                 ["Inventory Qty", inventory_qty],
                 ["Inventory Value", inventory_value],
             ]
-            data1 = {"title": title1}
-            data1["records"] = [
+            data["records1"] = [
                 ["Sales Qty", sale_qty1],
                 ["Sales Value", sale_value1],
                 ["Inventory Qty", inventory_qty1],
                 ["Inventory Value", inventory_value1],
             ]
-            data2 = {"title": title2}
-            data2["records"] = [
+            data["records2"] = [
                 ["Sales Qty", sale_qty2],
                 ["Sales Value", sale_value2],
                 ["Inventory Qty", inventory_qty2],
                 ["Inventory Value", inventory_value2],
             ]
-            data3 = {"title": title3}
-            data3["records"] = [
+            data["records3"] = [
                 ["Sales Qty", sale_qty3],
                 ["Sales Value", sale_value3],
                 ["Inventory Qty", inventory_qty3],
                 ["Inventory Value", inventory_value3],
             ]
 
-            # return data, data1, data2, data3
-            return view_summary_quarter(data, data1, data2, data3)
+            # return data
+            return view_summary_quarter(data)
         else:
-            data = {"title": "Quarter 1 Sales<br>(January, February, March)"}
-            data1 = {"title": "Quarter 2 Sales<br>(April, May, June)"}
-            data2 = {"title": "Quarter 3 Sales<br>(July, August, September)"}
-            data3 = {"title": "Quarter 4 Sales<br>(October, November, December)"}
-
             return view_no_data_quarter(
-                data["title"], data1["title"], data2["title"], data3["title"]
+                data["title"], data["title1"], data["title2"], data["title3"]
             )
     else:
         # show one quarter as requested on URL
@@ -718,11 +718,10 @@ def summary_quarter(year, quarter):
         result = pgcursor.fetchall()
 
         # AMBIL BARIS PERTAMA KARENA HASIL DARI RETURN CUMAN SATU BARIS
+        total_data = len(result)
         result = result[0]
 
         # JIKA DATA TIDAK NOL
-        total_data = len(result)
-
         if total_data > 0 and result[0] > 0:
             # MASUKAN RECORD KEDALAM VARIABLE SUPAYA TIDAK MEMBINGUNGKAN
             sale_qty = result[0]
