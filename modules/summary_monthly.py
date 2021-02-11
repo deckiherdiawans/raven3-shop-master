@@ -119,11 +119,10 @@ def summary_monthly(date):
     data = {"title": "Monthly Sales"}
 
     # AMBIL BARIS PERTAMA KARENA HASIL DARI RETURN CUMAN SATU BARIS
+    total_data = len(result)
     result = result[0]
 
     # JIKA DATA TIDAK NOL
-    total_data = len(result)
-
     if total_data > 0 and result[1] > 0:
         # MASUKAN RECORD KEDALAM VARIABLE SUPAYA TIDAK MEMBINGUNGKAN
         sale_qty = result[0]
